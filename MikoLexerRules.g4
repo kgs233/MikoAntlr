@@ -19,6 +19,15 @@ VAR : 'var' ;
 CONST : 'const' ;
 DEFINE : 'define' ;
 OPEN   : 'open' ;
+THIS   : 'this' ;
+
+PUBLIC  : 'public' ;
+PRIVATE : 'private' ;
+LOCAL   : 'local' ;
+
+ENUM   : 'enum' ;
+STRUCT : 'struct' ;
+STATIC : 'static' ;
 
 DOT    : '.' ;
 SEMIC  : ';' ;
@@ -54,6 +63,9 @@ DMIN   : '--' ;
 
 LPAREN : '(' ;
 RPAREN : ')' ;
+
+LBRACE : '{' ;
+RBRACE : '}' ;
 
 ASS        : '=' ;
 MUL_ASS    : '*=' ;

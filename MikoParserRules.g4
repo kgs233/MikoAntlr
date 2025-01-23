@@ -9,18 +9,49 @@ prog :
      ;
 
 statement : ';'
+          | defineStatement
+          | expression ';'
+          | defineStatement ';'
           ;
 
-define : defineHead (',' defineHead)? ;
-
-defineHead : defineKeyword ID ':' type ;
+accessKeyword : PUBLIC
+              | PRIVATE
+              | LOCAL
+              ;
 
 defineKeyword : VAR
               | CONST
               | DEFINE
               ;
 
-type : ;
+defineStatement : defineKeyword define ';' ;
+
+define : defineExpression (',' defineExpression)* ;
+
+defineExpression : ID ':' type ;
+
+type : call
+     | structType
+     | defineEnum
+     | lambdaExpression
+     ;
+
+structType : STRUCT ('(' call ')')? '{' structBody '}';
+
+structBody : sturctDefineStatement (sturctDefineStatement)*
+           ;
+
+sturctDefineStatement : accessKeyword (STATIC)? defineStatement ;
+
+defineEnum : ENUM ('(' call ')')? (':' type)? '{' enumBody '}' ;
+
+enumBody : ID (',' ID)*
+         | ID '=' expression (ID '=' expression)*
+         ;
+
+call : callFunction
+     | callIdentifier
+     ;
 
 callIdentifier : ID ('.' ID)* ;
 
@@ -29,9 +60,6 @@ callFunction : ID '(' functionArgs ')' ;
 functionArgs : expression (',' expression)*
              ;
 
-call : callFunction
-     | callIdentifier
-     ;
 atomExpression : call
                | INT
                | FLOAT
@@ -57,12 +85,13 @@ expression : '(' expression ')'                           # parent
            | expression '&&' expression                   # logicAnd
            | expression '||' expression                   # logicOr
            | callIdentifier assignmentOperator expression # assign
+           | THIS                                         # this
            | openExpression                               # open
            | lambdaExpression                             # lambda
            | atomExpression                               # atom
            ;
 
-openExpression : OPEN ID ('.' ID)? ;
+openExpression : OPEN callIdentifier ;
 
 assignmentOperator : '='
            | '/='
@@ -79,13 +108,11 @@ assignmentOperator : '='
 
 lambdaExpression : lambdaHead '.' lambdaBody ;
 
-lambdaHead : '\\' '(' define ')'
-           | '\\' defineHead;
+lambdaHead : '\\' '(' define ')' ;
 
 lambdaBody : codeBlock
            | statement
            | expression
            ;
 
-codeBlock :
-          ;
+codeBlock : '{' statement (statement)* '}' ;
