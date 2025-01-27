@@ -5,13 +5,16 @@ options {
      language=Cpp;
 }
 
-prog :
+prog : (openExpression ';')* (structBody)*
      ;
 
 statement : ';'
-          | defineStatement
           | expression ';'
           | defineStatement ';'
+          | ifStatement
+          | matchStatement
+          | forStatement
+          | whileStatement
           ;
 
 ifStatement : IF '(' expression ')' (codeBlock|statement)
