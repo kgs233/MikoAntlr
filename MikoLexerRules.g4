@@ -29,6 +29,18 @@ ENUM   : 'enum' ;
 STRUCT : 'struct' ;
 STATIC : 'static' ;
 
+IF    : 'if' ;
+ELSE  : 'else' ;
+MATCH : 'match' ;
+
+FOR     : 'for' ;
+FOREACH : 'foreach' ;
+WHILE  : 'while' ;
+
+BREAK  : 'break' ;
+NEXT   : 'next' ;
+RETURN : 'return' ;
+
 DOT    : '.' ;
 SEMIC  : ';' ;
 COLON  : ':' ;

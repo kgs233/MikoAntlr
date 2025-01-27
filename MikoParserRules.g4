@@ -14,6 +14,18 @@ statement : ';'
           | defineStatement ';'
           ;
 
+ifStatement : IF '(' expression ')' (codeBlock|statement)
+            | IF '(' expression ')' (codeBlock|statement) ELSE (codeBlock|statement)
+            ;
+
+matchStatement : MATCH '(' expression ')' '{' matchMember (matchMember)* '}' ELSE (codeBlock|statement) ;
+
+matchMember : expression ':' (codeBlock|statement) ;
+
+forStatement : FOR '(' define ';' expression ';' expression ')' (codeBlock|statement) ;
+
+whileStatement : WHILE '(' expression ')' (codeBlock|statement) ;
+
 accessKeyword : PUBLIC
               | PRIVATE
               | LOCAL
@@ -26,7 +38,7 @@ defineKeyword : VAR
 
 defineStatement : defineKeyword define ';' ;
 
-define : defineExpression (',' defineExpression)* ;
+define : defineExpression ('=' expression)? (',' defineExpression ('=' expression)?)* ;
 
 defineExpression : ID ':' type ;
 
@@ -68,6 +80,7 @@ atomExpression : call
                ;
 
 expression : '(' expression ')'                           # parent
+           | expression ',' expression                    # comma
            | expression '.' call                          # dot
            | '-' expression                               # minus
            | '~' expression                               # negate
@@ -111,8 +124,11 @@ lambdaExpression : lambdaHead '.' lambdaBody ;
 lambdaHead : '\\' '(' define ')' ;
 
 lambdaBody : codeBlock
+           | returncodeBlock
            | statement
            | expression
            ;
 
 codeBlock : '{' statement (statement)* '}' ;
+
+returncodeBlock : call codeBlock ;
