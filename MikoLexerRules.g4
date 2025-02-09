@@ -4,17 +4,6 @@ options {
     language=Cpp;
 }
 
-ID     : ID_START_CHAR ID_CONTINUE_CHAR* ;
-
-INT    : DEC_DIGITS
-       | OCT_DIGITS
-       | HEX_DIGITS
-       ;
-
-CHAR   : '\'' (EPACES|~[']|.) '\'' ;
-FLOAT  : (DEC_DIGITS|'0') '.' (DEC_DIGITS|'0'+) ;
-STRING : '"' (EPACES|~["]|.)*? '"' ;
-
 VAR : 'var' ;
 CONST : 'const' ;
 DEFINE : 'define' ;
@@ -40,6 +29,17 @@ WHILE  : 'while' ;
 BREAK  : 'break' ;
 NEXT   : 'next' ;
 RETURN : 'return' ;
+
+ID     : ID_START_CHAR ID_CONTINUE_CHAR* ;
+
+INT    : DEC_DIGITS
+       | OCT_DIGITS
+       | HEX_DIGITS
+       ;
+
+CHAR   : '\'' (EPACES|~[']|.) '\'' ;
+FLOAT  : (DEC_DIGITS|'0') '.' (DEC_DIGITS|'0'+) ;
+STRING : '"' (EPACES|~["]|.)*? '"' ;
 
 DOT    : '.' ;
 SEMIC  : ';' ;
@@ -78,6 +78,9 @@ RPAREN : ')' ;
 
 LBRACE : '{' ;
 RBRACE : '}' ;
+
+LBRACK : '[' ;
+RBRACK : ']' ;
 
 ASS        : '=' ;
 MUL_ASS    : '*=' ;

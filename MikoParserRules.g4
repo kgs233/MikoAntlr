@@ -5,7 +5,7 @@ options {
      language=Cpp;
 }
 
-prog : (openExpression ';')* (structBody)*
+prog :  (structBody)*
      ;
 
 statement : ';'
@@ -15,6 +15,8 @@ statement : ';'
           | matchStatement
           | forStatement
           | whileStatement
+          | returnStatement
+          | openStatement
           ;
 
 ifStatement : IF '(' expression ')' (codeBlock|statement)
@@ -28,6 +30,10 @@ matchMember : expression ':' (codeBlock|statement) ;
 forStatement : FOR '(' define ';' expression ';' expression ')' (codeBlock|statement) ;
 
 whileStatement : WHILE '(' expression ')' (codeBlock|statement) ;
+
+returnStatement : RETURN expression? ';' ;
+
+openStatement : OPEN expression ';' ;
 
 accessKeyword : PUBLIC
               | PRIVATE
@@ -46,6 +52,7 @@ define : defineExpression ('=' expression)? (',' defineExpression ('=' expressio
 defineExpression : ID ':' type ;
 
 type : call
+     | call '[' expression? ']'
      | structType
      | defineEnum
      | lambdaExpression
@@ -53,10 +60,10 @@ type : call
 
 structType : STRUCT ('(' call ')')? '{' structBody '}';
 
-structBody : sturctDefineStatement (sturctDefineStatement)*
+structBody : (openExpression|structDefineStatement) (openExpression|structDefineStatement)*
            ;
 
-sturctDefineStatement : accessKeyword (STATIC)? defineStatement ;
+structDefineStatement : (accessKeyword)? (STATIC)? defineStatement ;
 
 defineEnum : ENUM ('(' call ')')? (':' type)? '{' enumBody '}' ;
 
@@ -124,7 +131,7 @@ assignmentOperator : '='
 
 lambdaExpression : lambdaHead '.' lambdaBody ;
 
-lambdaHead : '\\' '(' define ')' ;
+lambdaHead : LAMBDA '(' define* ')' ;
 
 lambdaBody : codeBlock
            | returncodeBlock
