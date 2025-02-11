@@ -94,6 +94,8 @@ BITAND_ASS : '&=' ;
 BITXOR_ASS : '^=' ;    
 BITOR_ASS  : '|=' ;    
 
+COMPILER : '@' ;
+
 LAMBDA : '\\' ;
 
 WS     : [ \t\r\n]+ -> skip ;

@@ -60,7 +60,7 @@ type : call
 
 structType : STRUCT ('(' call ')')? '{' structBody '}';
 
-structBody : (openExpression|structDefineStatement) (openExpression|structDefineStatement)*
+structBody : (openStatement|structDefineStatement) (openStatement|structDefineStatement)*
            ;
 
 structDefineStatement : (accessKeyword)? (STATIC)? defineStatement ;
@@ -71,9 +71,17 @@ enumBody : ID (',' ID)*
          | ID '=' expression (ID '=' expression)*
          ;
 
-call : callFunction
-     | callIdentifier
+call : compilerCall
+     | programCall
      ;
+
+compilerCall : '@' callFunction
+             | '@' callIdentifier
+             ;
+
+programCall : callFunction
+            | callIdentifier
+            ;
 
 callIdentifier : ID ('.' ID)* ;
 
@@ -141,4 +149,4 @@ lambdaBody : codeBlock
 
 codeBlock : '{' statement (statement)* '}' ;
 
-returncodeBlock : call codeBlock ;
+returncodeBlock : type codeBlock ;
