@@ -5,7 +5,7 @@ options {
      language=Cpp;
 }
 
-prog :  (structBody)*
+prog :  (openStatement|structMember)*
      ;
 
 statement : ';'
@@ -62,8 +62,9 @@ type : compilerCall
      ;
 
 externCall : CALL ID                        # externVar
-           | CALL callFunction              # externFunc
-           | CALL STRUCT '{' structBody '}' # externStruct
+           | CALL ID '(' functionArgs ')'   # externFunc
+           | CALL STRUCT '{' structMember* '}' # externStruct
+           ;
 
 structType : STRUCT extendObject? '{' (openStatement|structMember)* '}';
 
@@ -113,14 +114,14 @@ expression : call                                         # object
            | expression '|' expression                    # bitOr
            | expression '&&' expression                   # logicAnd
            | expression '||' expression                   # logicOr
-           | callIdentifier assignmentOperator expression # assign
+           | expression assignmentOperator expression     # assign
            | THIS                                         # this
            | openExpression                               # open
            | lambdaExpression                             # lambda
            | atomExpression                               # atom
            ;
 
-openExpression : OPEN callIdentifier ;
+openExpression : OPEN ID ('.' ID)* ;
 
 assignmentOperator : '='
            | '/='
