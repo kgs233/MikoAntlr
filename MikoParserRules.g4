@@ -47,45 +47,42 @@ defineKeyword : VAR
 
 defineStatement : defineKeyword define ';' ;
 
-define : defineExpression ('=' expression)? (',' defineExpression ('=' expression)?)* ;
+define : defineExpression (',' defineExpression)* ;
 
-defineExpression : ID ':' type ;
+defineExpression : ID ':' type ('=' expression)? ;
 
-type : call
-     | call '[' expression? ']'
+type : compilerCall
+     | call
+     | defineEnum
      | structType
      | defineEnum
      | lambdaExpression
+     | '(' type ('|' type)* ')'
+     | '(' type (',' type)* ')'
      ;
 
-structType : STRUCT ('(' call ')')? '{' structBody '}';
+externCall : CALL ID                        # externVar
+           | CALL callFunction              # externFunc
+           | CALL STRUCT '{' structBody '}' # externStruct
 
-structBody : (openStatement|structDefineStatement) (openStatement|structDefineStatement)*
+structType : STRUCT extendObject? '{' (openStatement|structMember)* '}';
+
+structMember : (accessKeyword)? (STATIC)? defineStatement ;
+
+defineEnum : ENUM extendObject? '{' enumMember (',' enumMember)* '}' ;
+
+enumMember : (ID|ID '=' expression)
            ;
 
-structDefineStatement : (accessKeyword)? (STATIC)? defineStatement ;
+extendObject : '(' call ')' ;
 
-defineEnum : ENUM ('(' call ')')? (':' type)? '{' enumBody '}' ;
-
-enumBody : ID (',' ID)*
-         | ID '=' expression (ID '=' expression)*
-         ;
-
-call : compilerCall
-     | programCall
-     ;
-
-compilerCall : '@' callFunction
-             | '@' callIdentifier
+compilerCall : '@' ID                      # compilerVar
+             | '@' ID '(' functionArgs ')' # compilerFunc
              ;
 
-programCall : callFunction
-            | callIdentifier
-            ;
-
-callIdentifier : ID ('.' ID)* ;
-
-callFunction : ID '(' functionArgs ')' ;
+call : ID ('.' ID)*
+     | ID '(' functionArgs ')'
+     ;
 
 functionArgs : expression (',' expression)*
              ;
@@ -97,14 +94,15 @@ atomExpression : call
                | STRING
                ;
 
-expression : '(' expression ')'                           # parent
-           | expression ',' expression                    # comma
-           | expression '.' call                          # dot
+expression : call                                         # object
+           | '(' expression ')'                           # parent
+           | ',' expression                               # comma
+           | '.' expression                               # dot
            | '-' expression                               # minus
            | '~' expression                               # negate
            | '!' expression                               # not
-           | '++' expression                              # increment
-           | '--' expression                              # decrment  
+           | expression '++'                              # increment
+           | expression '--'                              # decrment  
            | expression ('*'|'/'|'%') expression          # multi
            | expression ('+'|'-') expression              # add
            | expression ('<<'|'>>') expression            # bitshift

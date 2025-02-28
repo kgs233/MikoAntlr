@@ -30,6 +30,8 @@ BREAK  : 'break' ;
 NEXT   : 'next' ;
 RETURN : 'return' ;
 
+CALL   : 'call' ;
+
 ID     : ID_START_CHAR ID_CONTINUE_CHAR* ;
 
 INT    : DEC_DIGITS
