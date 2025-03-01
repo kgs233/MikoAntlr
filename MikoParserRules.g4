@@ -45,9 +45,7 @@ defineKeyword : VAR
               | DEFINE
               ;
 
-defineStatement : defineKeyword define ';' ;
-
-define : defineExpression (',' defineExpression)* ;
+defineStatement : defineKeyword defineExpression (',' defineExpression)* ';' ;
 
 defineExpression : ID ':' type ('=' expression)? ;
 
@@ -138,7 +136,7 @@ assignmentOperator : '='
 
 lambdaExpression : lambdaHead '.' lambdaBody ;
 
-lambdaHead : LAMBDA '(' define* ')' ;
+lambdaHead : LAMBDA '(' defineExpression (',' defineExpression)* ')' ;
 
 lambdaBody : codeBlock
            | returncodeBlock
