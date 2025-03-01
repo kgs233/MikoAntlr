@@ -27,7 +27,7 @@ matchStatement : MATCH '(' expression ')' '{' matchMember (matchMember)* '}' ELS
 
 matchMember : expression ':' (codeBlock|statement) ;
 
-forStatement : FOR '(' define ';' expression ';' expression ')' (codeBlock|statement) ;
+forStatement : FOR '(' defineExpression (',' expression)* ';' expression ';' expression ')' (codeBlock|statement) ;
 
 whileStatement : WHILE '(' expression ')' (codeBlock|statement) ;
 
