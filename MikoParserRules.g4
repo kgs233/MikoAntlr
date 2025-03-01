@@ -37,7 +37,6 @@ openStatement : OPEN expression ';' ;
 
 accessKeyword : PUBLIC
               | PRIVATE
-              | LOCAL
               ;
 
 defineKeyword : VAR
@@ -47,16 +46,16 @@ defineKeyword : VAR
 
 defineStatement : defineKeyword defineExpression (',' defineExpression)* ';' ;
 
-defineExpression : ID ':' type ('=' expression)? ;
+defineExpression : ID ':' defineType ('=' expression)? ;
 
-type : compilerCall
+defineType : compilerCall
      | call
      | defineEnum
      | structType
      | defineEnum
      | lambdaExpression
-     | '(' type ('|' type)* ')'
-     | '(' type (',' type)* ')'
+     | '(' defineType ('|' defineType)* ')'
+     | '(' defineType (',' defineType)* ')'
      ;
 
 externCall : CALL ID                        # externVar
@@ -146,4 +145,4 @@ lambdaBody : codeBlock
 
 codeBlock : '{' statement (statement)* '}' ;
 
-returncodeBlock : type codeBlock ;
+returncodeBlock : defineType codeBlock ;
