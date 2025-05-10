@@ -32,6 +32,10 @@ RETURN : 'return' ;
 
 CALL   : 'call' ;
 
+LAMBDA : LAMBDA_LATTER
+       | LAMBDA_SYMBOL
+       ;
+
 ID     : ID_START_CHAR ID_CONTINUE_CHAR* ;
 
 INT    : DEC_DIGITS
@@ -98,9 +102,12 @@ BITOR_ASS  : '|=' ;
 
 COMPILER : '@' ;
 
-LAMBDA : '\\' ;
+LAMBDA_ARROW : '->' ;
 
 WS     : [ \t\r\n]+ -> skip ;
+
+fragment LAMBDA_LATTER : 'lambda' ;
+fragment LAMBDA_SYMBOL : 'λ' ;
 
 fragment DEC_DIGITS          : DEC_START_DIGIT DEC_CONTINUE_DIGIT* ;
 fragment DEC_START_DIGIT     : [1-9] ;

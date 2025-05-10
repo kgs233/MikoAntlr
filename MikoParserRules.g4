@@ -133,7 +133,7 @@ assignmentOperator : '='
            | '|='
            ;
 
-lambdaExpression : lambdaHead '.' lambdaBody ;
+lambdaExpression : lambdaHead ('.'|'->') lambdaBody ;
 
 lambdaHead : LAMBDA '(' defineExpression (',' defineExpression)* ')' ;
 
