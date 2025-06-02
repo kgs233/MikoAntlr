@@ -11,13 +11,21 @@ prog :  (openStatement|structMember)*
 statement : ';'
           | expression ';'
           | defineStatement ';'
-          | ifStatement
-          | matchStatement
-          | forStatement
-          | whileStatement
-          | returnStatement
           | openStatement
+          | flowStatement
           ;
+
+flowStatement : ifStatement
+             | matchStatement
+             | eachStatement
+             | whileStatement
+             | returnStatement
+             | LABEL ID ':'
+             | GOTO ID ';'
+             | LOOP ';'
+             | STOP ';'
+             | NEXT ';'
+             ;
 
 ifStatement : IF '(' expression ')' (codeBlock|statement)
             | IF '(' expression ')' (codeBlock|statement) ELSE (codeBlock|statement)
@@ -27,9 +35,13 @@ matchStatement : MATCH '(' expression ')' '{' matchMember (matchMember)* '}' ELS
 
 matchMember : expression ':' (codeBlock|statement) ;
 
-forStatement : FOR '(' defineExpression (',' expression)* ';' expression ';' expression ')' (codeBlock|statement) ;
+eachStatement : EACH '(' defineExpression ')' FROM expression (codeBlock|statement)           # foreach
+              | EACH '(' defineExpression ')' FROM (INT|ID) TO (INT|ID) (codeBlock|statement) # for
+              ;
 
-whileStatement : WHILE '(' expression ')' (codeBlock|statement) ;
+whileStatement : WHILE '(' expression ')' (STOP|LOOP)? (codeBlock|statement) ;
+
+breakStatement : BREAK (INT)? ;
 
 returnStatement : RETURN expression? ';' ;
 
@@ -37,11 +49,11 @@ openStatement : OPEN expression ';' ;
 
 accessKeyword : PUBLIC
               | PRIVATE
+              | OUTSIDE
               ;
 
 defineKeyword : VAR
               | CONST
-              | DEFINE
               ;
 
 defineStatement : defineKeyword defineExpression (',' defineExpression)* ';' ;
@@ -49,14 +61,14 @@ defineStatement : defineKeyword defineExpression (',' defineExpression)* ';' ;
 defineExpression : ID ':' defineType ('=' expression)? ;
 
 defineType : compilerCall
-     | call
-     | defineEnum
-     | structType
-     | defineEnum
-     | lambdaExpression
-     | '(' defineType ('|' defineType)* ')'
-     | '(' defineType (',' defineType)* ')'
-     ;
+           | call
+           | defineEnum
+           | structType
+           | defineEnum
+           | lambdaExpression
+           | '(' defineType ('|' defineType)* ')'
+           | '(' defineType (',' defineType)* ')'
+           ;
 
 externCall : CALL ID                        # externVar
            | CALL ID '(' functionArgs ')'   # externFunc
@@ -135,7 +147,7 @@ assignmentOperator : '='
 
 lambdaExpression : lambdaHead ('.'|'->') lambdaBody ;
 
-lambdaHead : LAMBDA '(' defineExpression (',' defineExpression)* ')' ;
+lambdaHead : LAMBDA '(' defineKeyword? defineExpression (',' defineKeyword? defineExpression)* ')' ;
 
 lambdaBody : codeBlock
            | returncodeBlock

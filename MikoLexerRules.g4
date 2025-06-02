@@ -4,15 +4,15 @@ options {
     language=Cpp;
 }
 
-VAR : 'var' ;
-CONST : 'const' ;
-DEFINE : 'define' ;
 OPEN   : 'open' ;
 THIS   : 'this' ;
 
+VAR    : 'var' ;
+CONST  : 'const' ;
+
 PUBLIC  : 'public' ;
 PRIVATE : 'private' ;
-LOCAL   : 'local' ;
+OUTSIDE : 'outside' ;
 
 ENUM   : 'enum' ;
 STRUCT : 'struct' ;
@@ -22,12 +22,19 @@ IF    : 'if' ;
 ELSE  : 'else' ;
 MATCH : 'match' ;
 
-FOR     : 'for' ;
-FOREACH : 'foreach' ;
+EACH   : 'each' ;
+FROM   : 'from' ;
+TO     : 'to' ;
+STEP   : 'step' ;
+
 WHILE  : 'while' ;
 
-BREAK  : 'break' ;
+GOTO   : 'goto' ;
+STOP   : 'stop' ;
+LOOP   : 'loop' ;
 NEXT   : 'next' ;
+BREAK  : 'break' ;
+LABEL  : 'label' ;
 RETURN : 'return' ;
 
 CALL   : 'call' ;
