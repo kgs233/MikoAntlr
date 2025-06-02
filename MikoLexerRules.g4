@@ -7,6 +7,7 @@ options {
 OPEN   : 'open' ;
 THIS   : 'this' ;
 
+DEF    : 'def' ;
 VAR    : 'var' ;
 CONST  : 'const' ;
 

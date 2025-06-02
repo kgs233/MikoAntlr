@@ -52,23 +52,25 @@ accessKeyword : PUBLIC
               | OUTSIDE
               ;
 
-defineKeyword : VAR
-              | CONST
-              ;
-
-defineStatement : defineKeyword defineExpression (',' defineExpression)* ';' ;
+defineStatement : DEF? defineExpression (',' defineExpression)* ';' ;
 
 defineExpression : ID ':' defineType ('=' expression)? ;
 
-defineType : compilerCall
-           | call
-           | defineEnum
-           | structType
-           | defineEnum
-           | lambdaExpression
-           | '(' defineType ('|' defineType)* ')'
-           | '(' defineType (',' defineType)* ')'
-           ;
+defineType : defineVariability? type;
+
+defineVariability : CONST
+                  | VAR
+                  ;
+
+type : compilerCall
+     | call
+     | defineEnum
+     | structType
+     | defineEnum
+     | lambdaExpression
+     | '(' defineType ('|' defineType)* ')'
+     | '(' defineType (',' defineType)* ')'
+     ;
 
 externCall : CALL ID                        # externVar
            | CALL ID '(' functionArgs ')'   # externFunc
@@ -147,7 +149,7 @@ assignmentOperator : '='
 
 lambdaExpression : lambdaHead ('.'|'->') lambdaBody ;
 
-lambdaHead : LAMBDA '(' defineKeyword? defineExpression (',' defineKeyword? defineExpression)* ')' ;
+lambdaHead : LAMBDA '(' defineExpression (',' defineExpression)* ')' ;
 
 lambdaBody : codeBlock
            | returncodeBlock
