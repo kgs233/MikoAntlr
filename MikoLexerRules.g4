@@ -23,7 +23,7 @@ IF    : 'if' ;
 ELSE  : 'else' ;
 MATCH : 'match' ;
 
-EACH   : 'each' ;
+FOR    : 'for' ;
 FROM   : 'from' ;
 TO     : 'to' ;
 STEP   : 'step' ;

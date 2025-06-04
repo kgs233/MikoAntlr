@@ -35,8 +35,8 @@ matchStatement : MATCH '(' expression ')' '{' matchMember (matchMember)* '}' ELS
 
 matchMember : expression ':' (codeBlock|statement) ;
 
-eachStatement : EACH '(' defineExpression ')' FROM expression (codeBlock|statement)           # foreach
-              | EACH '(' defineExpression ')' FROM (INT|ID) TO (INT|ID) (codeBlock|statement) # for
+eachStatement : FOR '(' defineExpression ')' FROM expression (codeBlock|statement)           # foreach
+              | FOR '(' defineExpression ')' FROM (INT|ID) TO (INT|ID) (codeBlock|statement) # for
               ;
 
 whileStatement : WHILE '(' expression ')' (STOP|LOOP)? (codeBlock|statement) ;
@@ -51,12 +51,12 @@ accessKeyword : PUBLIC
               | PRIVATE
               | OUTSIDE
               ;
-
-defineStatement : DEF? defineExpression (',' defineExpression)* ';' ;
+              
+defineStatement : DEF? defineExpression (',' defineExpression)* ;
 
 defineExpression : ID ':' defineType ('=' expression)? ;
 
-defineType : defineVariability? type;
+defineType : (defineVariability)? type;
 
 defineVariability : CONST
                   | VAR
@@ -79,7 +79,7 @@ externCall : CALL ID                        # externVar
 
 structType : STRUCT extendObject? '{' (openStatement|structMember)* '}';
 
-structMember : (accessKeyword)? (STATIC)? defineStatement ;
+structMember : (accessKeyword)? (STATIC)? defineStatement ';'? ;
 
 defineEnum : ENUM extendObject? '{' enumMember (',' enumMember)* '}' ;
 
@@ -157,6 +157,6 @@ lambdaBody : codeBlock
            | expression
            ;
 
-codeBlock : '{' statement (statement)* '}' ;
+codeBlock : '{' (statement)* '}' ;
 
 returncodeBlock : defineType codeBlock ;
