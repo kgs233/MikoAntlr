@@ -5,8 +5,8 @@ options {
      language=Cpp;
 }
 
-prog :  (openStatement|structMember)*
-     ;
+source :  (openStatement|structMember)*
+       ;
 
 statement : ';'
           | expression ';'
